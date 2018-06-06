@@ -150,14 +150,22 @@ $(document).ready(() => {
           password: password
         }
       }).then(function(response) {
-        console.log('logged in');
-        console.log(response);
         localStorage.setItem('token', response.data.token);
         console.log(localStorage.getItem('token'));
+        $('#logoutLink').toggleClass('hidden show');
+        $('#loginlink').toggleClass(' show hidden');
+        $('#signUpLink').toggleClass('show hidden');
+        $('#submitlink').toggleClass('show hidden');
       });
       event.target.reset();
     });
   }
+
+  //show submit div on click of  submit link
+  $('#submitlink').on('click', function(event) {
+    $('#submit-form').toggleClass('hidden show');
+  });
+
   addStory();
   favoriteStar();
   showFavorite();

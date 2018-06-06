@@ -32,17 +32,19 @@
             <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
                 <div class="navbar-nav navbar-dark">
                 <!-- can use href to collapse form with bootstrap -->
-                <a class="nav-item nav-link active" role="button" href="#submit-form">Submit</a>
+                <a id="submitlink" class="nav-item nav-link active hidden" role="button" href="#submit-form">Submit</a>
                 <a class="nav-item nav-link active favoriteNav" id="switch" href="#">Favorites</a>
-                <a id="loginlink" class="nav-item nav-link active"  role="button" href="#submit-form">Login</a>
-                <a  id="signUpLink" class="nav-item nav-link active"  role="button" href="#submit-form">Sign Up</a>                                               
-                </div>
+                <a id="loginlink" class="nav-item nav-link active show"  role="button" href="#submit-form">Login</a>
+                <a  id="signUpLink" class="nav-item nav-link active show"  role="button" href="#submit-form">Sign Up</a>                                               
+                <a  id="logoutLink" class="nav-item nav-link active hidden"  role="button" href="#submit-form">Log Out</a>                                                
+              </div>
             </div>
             </nav>
         </div>
         
-        <!-- adding bootstrap form -->
-        <form class="collapse" id="submit-form">
+        <!-- Sumit Form adding bootstrap form -->
+    <div class="hidden" id="submit-form">
+        <form>
             <div class="form-group row">
                 <!-- .col-sm-num for bootstrap column sizing will apply to the
                 SMALLEST breakpoint and ALL those above it so in this case
@@ -50,18 +52,20 @@
                 <label for="story" class="col-sm-2 col-form-label"><b>Story</b></label>
                 <div class="col-sm-10 story-input">
                 <input type="text" class="form-control col-sm-6" id="story" placeholder="Title of your story">
-                </div>
-                <!-- if I need to put anything under form bar 
-                    <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small> -->
             </div>
+          </div>
             <div class="form-group row">
                 <label for="data" class="col-sm-2 col-form-label"><b>URL</b></label>
                 <div class="col-sm-10 data-input">
                 <input type="url" class="form-control col-sm-6" id="data" placeholder="URL only!">
                 </div>
-            </div>
+              </div>
+
+
+        
             <button type="submit" class="btn submit-story btn-success">Submit Story</button>
         </form>
+   </div>
 <!-- Login Form -->
 <div id="login-form" class="hidden">
     <form  >
