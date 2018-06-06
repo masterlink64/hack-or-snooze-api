@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>hack-or-snooze-a-thon</title>
+
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+    <!-- might have to use font awesome for star -->
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
+    <link rel="stylesheet" href="style.css">
+    <!-- adding all of boostrap JS because I want to use the collapse feature of BS for the form -->
+    <script
+  src="https://code.jquery.com/jquery-3.3.1.js"
+  integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
+  crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
+    <script src="app.js"></script>
+</head>
+<body>
+    <!-- container so that I can add color to the story box -->
+    <div class="container">
+        <!-- adding a wrapper for nav bar in case I want to do anything to it -->
+        <div class="navWrapper">
+            <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
+            <a class="navbar-brand" href="#"><b>hack-or-snooze-a-thon</b></a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavAltMarkup">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+                <div class="navbar-nav navbar-dark">
+                <!-- can use href to collapse form with bootstrap -->
+                <a class="nav-item nav-link active" role="button" href="#submit-form">Submit</a>
+                <a class="nav-item nav-link active favoriteNav" id="switch" href="#">Favorites</a>
+                <a id="loginlink" class="nav-item nav-link active"  role="button" href="#submit-form">Login</a>
+                <a  id="signUpLink" class="nav-item nav-link active"  role="button" href="#submit-form">Sign Up</a>                                               
+                </div>
+            </div>
+            </nav>
+        </div>
+        
+        <!-- adding bootstrap form -->
+        <form class="collapse" id="submit-form">
+            <div class="form-group row">
+                <!-- .col-sm-num for bootstrap column sizing will apply to the
+                SMALLEST breakpoint and ALL those above it so in this case
+            samll to the largest devices -->
+                <label for="story" class="col-sm-2 col-form-label"><b>Story</b></label>
+                <div class="col-sm-10 story-input">
+                <input type="text" class="form-control col-sm-6" id="story" placeholder="Title of your story">
+                </div>
+                <!-- if I need to put anything under form bar 
+                    <small id="emailHelp" class="form-text text-muted">We'll never share your email with anyone else.</small> -->
+            </div>
+            <div class="form-group row">
+                <label for="data" class="col-sm-2 col-form-label"><b>URL</b></label>
+                <div class="col-sm-10 data-input">
+                <input type="url" class="form-control col-sm-6" id="data" placeholder="URL only!">
+                </div>
+            </div>
+            <button type="submit" class="btn submit-story btn-success">Submit Story</button>
+        </form>
+<!-- Login Form -->
+<div id="login-form" class="hidden">
+    <form  >
+      <div class="form-group row">
+        <label for="loginuser-name" class="col-sm-2 col-form-label"><b>User Name</b></label>
+        <div class="col-sm-10 login-user-name-input">
+        <input type="text" class="form-control col-sm-6" id="loginusername" placeholder="User Name">
+        </div>
+    </div>
+    <div class="form-group row">
+      <label for="loginpassword" class="col-sm-2 col-form-label"><b>Password</b></label>
+      <div class="col-sm-10 loginpassword-input">
+      <!-- need to use password type -->
+      <input type="password" class="form-control col-sm-6" id="loginpassword" placeholder="Password">
+      </div>
+  </div>
+      <button type="submit" class="btn login btn-success">Log-In</button>
+  </form>
+</div>
+<!-- SignUp Form -->
+      <div id="signup-form" class="hidden">
+        <form  >
+          <div class="form-group row">
+              <label for="full-name" class="col-sm-2 col-form-label"><b>Name</b></label>
+              <div class="col-sm-10 signup-input">
+              <input type="text" class="form-control col-sm-6" id="full-name" placeholder="Full Name">
+              </div>
+          </div>
+          <div class="form-group row">
+            <label for="user-name" class="col-sm-2 col-form-label"><b>User Name</b></label>
+            <div class="col-sm-10 user-name-input">
+            <input type="text" class="form-control col-sm-6" id="user-name" placeholder="User Name">
+            </div>
+        </div>
+        <div class="form-group row">
+          <label for="password" class="col-sm-2 col-form-label"><b>Password</b></label>
+          <div class="col-sm-10 password-input">
+          <!-- need to use password type -->
+          <input type="password" class="form-control col-sm-6" id="password" placeholder="Password">
+          </div>
+      </div>
+          <button type="submit" class="btn signup-story btn-success">Sign Up</button>
+      </form>
+    </div>
+        <!-- need to create div and ordered list so we can append stories to -->
+        <div class="col-sm-8 all-stories">
+            <ol class="stories-list">                                             
+            </ol>
+        </div>
+    </div>
+</body>
+<!-- adding all of boostrap JS because I want to use the collapse feature of BS for the form -->
+<!-- <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
+<script src="app.js"></script> -->
+</html>

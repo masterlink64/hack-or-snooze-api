@@ -1,0 +1,26 @@
+.fa-star {
+  color: gold;
+  border-color: navy;
+}
+form {
+  margin: 2em;
+  padding: 2em;
+}
+
+.all-stories {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.container {
+  background-color: lightgoldenrodyellow;
+  padding-right: 0;
+  padding-left: 0;
+}
+
+.hidden {
+  display: none;
+}
+.show {
+  display: block;
+}
