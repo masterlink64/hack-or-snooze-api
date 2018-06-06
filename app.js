@@ -25,21 +25,33 @@ $(document).ready(() => {
     //
     $('#submit-form').submit(function(event) {
       event.preventDefault();
-      let storyVal = $('#story').val();
-      let dataVal = $('#data').val();
-      // adding story and link to list
-      // will need to use href to link text
+      let urlVal = $('#url').val();
+      let titleVal = $('#title').val();
+      let authorVal = $('#author').val();
+      let username = localStorage.getItem('username');
+      let userToken = localStorage.getItem('token');
+
       $('.stories-list').append(
-        `<li class="story"><i class="far fa-star"></i> <a href="${dataVal}">${storyVal}</a></li>`
+        `<li class="story"><i class="far fa-star"></i> <a href="${urlVal}">${titleVal}</a></li>`
       );
-      // fix favorite star later, right now it is only adding event listener to new and toggling off the listener
-      // for previous stories
-      //favoriteStar();
-      // clarify why this works
-      // reset form to blank
-      $('#submit-form').each(function() {
-        this.reset();
+      // ajax to API
+      $.ajax({
+        method: 'POST',
+        url: 'https://hack-or-snooze.herokuapp.com/stories',
+        data: {
+          data: {
+            author: authorVal,
+            title: titleVal,
+            url: urlVal,
+            username: username
+          }
+        },
+        headers: { Authorization: `Bearer ${userToken}` }
+      }).then(function(response) {
+        console.log(response);
       });
+
+      event.target.reset();
     });
   }
   // write a function to hide current list and show favorite list
@@ -144,6 +156,7 @@ $(document).ready(() => {
       event.preventDefault();
       let userName = $('#loginusername').val();
       let password = $('#loginpassword').val();
+      localStorage.setItem('username', userName);
       $.post('https://hack-or-snooze.herokuapp.com/auth', {
         data: {
           username: userName,
