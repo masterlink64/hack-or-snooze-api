@@ -4,6 +4,16 @@ $(document).ready(() => {
   // using an event listener on click, toggle class between far and fas
   // come back to this event listener for the bonus
   // Is this recommended? creating a function for this purpose to make smaller digestable code?
+  populateStories();
+  addStory();
+  favoriteStar();
+  //showFavorite();
+  userSignUp();
+  logIn();
+  profile();
+  showAll();
+  unFavorite();
+
   function favoriteStar() {
     // trying event delegation
     // instead of assigning event listener to EVERY star
@@ -16,6 +26,24 @@ $(document).ready(() => {
       //send ajax request to post data
       $.ajax({
         method: 'post',
+        url: `https://hack-or-snooze.herokuapp.com/users/${username}/favorites/${
+          event.target.id
+        }`,
+        headers: { Authorization: `Bearer ${userToken}` }
+      }).then(function(response) {
+        console.log(response);
+      });
+    });
+  }
+  function unFavorite() {
+    $('.remove-fav').on('click', function(event) {
+      //let favList = $('fav-list');
+      let username = localStorage.getItem('username');
+      let userToken = localStorage.getItem('token');
+      //$(this).toggleClass('far fas');
+      //send ajax request to post data
+      $.ajax({
+        method: 'DELETE',
         url: `https://hack-or-snooze.herokuapp.com/users/${username}/favorites/${
           event.target.id
         }`,
@@ -59,32 +87,32 @@ $(document).ready(() => {
     });
   }
   // write a function to hide current list and show favorite list
-  function showFavorite() {
-    let favoriteNav = $('.favoriteNav');
-    let navItems = $('#navbarNavAltMarkup');
-    let allStories = $('.all-stories');
-    let favStories = $('.fav-list');
-    // when you click the favorite text on the nav bar do certain steps
-    // hide current content
-    // display new ordered list
-    // event delegation to add event listener to the favortie nav button
-    navItems.on('click', '.favoriteNav', function(event) {
-      // hide only non faves? far is the class of nonfave story
-      $('.far')
-        // closest will find the closest parent that meets the condition?
-        // so will find li name and hide it that also has class of .far
-        .closest('li')
-        .toggleClass('all')
-        .hide();
-      // changing text to toggle between fav and all
-      // also switch class will only work for jquery UI?
-      // need to remove class and then add a class or would toggle class work better?
-      $(this).text($(this).text() === 'Favorites' ? 'All' : 'Favorites');
-      $(this)
-        .removeClass('favoriteNav')
-        .addClass('allNav');
-    });
-  }
+  // function showFavorite() {
+  //   let favoriteNav = $('.favoriteNav');
+  //   let navItems = $('#navbarNavAltMarkup');
+  //   let allStories = $('.all-stories');
+  //   let favStories = $('.fav-list');
+  //   // when you click the favorite text on the nav bar do certain steps
+  //   // hide current content
+  //   // display new ordered list
+  //   // event delegation to add event listener to the favortie nav button
+  //   navItems.on('click', '.favoriteNav', function(event) {
+  //     // hide only non faves? far is the class of nonfave story
+  //     $('.far')
+  //       // closest will find the closest parent that meets the condition?
+  //       // so will find li name and hide it that also has class of .far
+  //       .closest('li')
+  //       .toggleClass('all')
+  //       .hide();
+  //     // changing text to toggle between fav and all
+  //     // also switch class will only work for jquery UI?
+  //     // need to remove class and then add a class or would toggle class work better?
+  //     $(this).text($(this).text() === 'Favorites' ? 'All' : 'Favorites');
+  //     $(this)
+  //       .removeClass('favoriteNav')
+  //       .addClass('allNav');
+  //   });
+  // }
   // show all function
   // use .allNav class that was added to the navbar and also use event delegation
   function showAll() {
@@ -106,24 +134,26 @@ $(document).ready(() => {
     showAll();
   }
   // 1) grabbing 10 latest stories
-  $.getJSON('https://hack-or-snooze.herokuapp.com/stories/')
-    .then(function(response) {
-      for (let i = 0; i < 10; i++) {
-        var storyid = response.data[i].storyId;
-        let urlVal = response.data[i].url;
-        let storyVal = response.data[i].title;
-        $('.stories-list').append(
-          `<li class="story"><i class="far fa-star" id ="${storyid}"></i> <a href="${urlVal}">${storyVal}</a></li>`
-        );
-      }
-    })
-    .catch(function(err) {
-      console.log(err);
+  function populateStories() {
+    $.getJSON('https://hack-or-snooze.herokuapp.com/stories/')
+      .then(function(response) {
+        for (let i = 0; i < 10; i++) {
+          var storyid = response.data[i].storyId;
+          let urlVal = response.data[i].url;
+          let storyVal = response.data[i].title;
+          $('.stories-list').append(
+            `<li class="story"><i class="far fa-star" id ="${storyid}"></i> <a href="${urlVal}">${storyVal}</a></li>`
+          );
+        }
+      })
+      .catch(function(err) {
+        console.log(err);
+      });
+    // Make signUp form
+    $('#signUpLink').on('click', function(event) {
+      $('#signup-form').toggleClass(' hidden show');
     });
-  // Make signUp form
-  $('#signUpLink').on('click', function(event) {
-    $('#signup-form').toggleClass(' hidden show');
-  });
+  }
 
   $('#loginlink').on('click', function(event) {
     //alert('hello');
@@ -178,32 +208,58 @@ $(document).ready(() => {
   //6 login profile
   function profile() {
     $('#profile').on('click', function(event) {
+      $('#profile-name').empty();
+      $('#profile-username').empty();
+      $('#showfavorite').empty();
+      $('#mystories').empty();
       let username = localStorage.getItem('username');
       let userToken = localStorage.getItem('token');
+
       $.ajax({
         method: 'GET',
         url: `https://hack-or-snooze.herokuapp.com/users/${username}`,
         headers: { Authorization: `Bearer ${userToken}` },
         dataType: 'json'
       }).then(function(response) {
+        let favlength = response.data.favorites.length;
+        let storiesLength = response.data.stories.length;
         let profileUsername = response.data.username;
         let profileName = response.data.name;
         $('#profile-name').append(`Name: ${profileName}`);
         $('#profile-username').append(`Username: ${profileUsername}`);
         $('.profile').toggleClass('show hidden');
+        // add favorites
+        for (let i = 0; i < favlength; i++) {
+          let url = response.data.favorites[i].url;
+          let title = response.data.favorites[i].title;
+          let favId = response.data.favorites[i].storyId;
+          $('#showfavorite').append(
+            `<li class="story"><i class="fas fa-star"><a href="${url}">${title}</a><button class='remove-fav' type='button'>Remove Favorite</button></li>`
+          );
+        }
+        //add stories
+        for (let j = 0; j < storiesLength; j++) {
+          let url = response.data.stories[j].url;
+          let title = response.data.stories[j].title;
+          let storyId = response.data.stories[j].storyId;
+          $('#mystories').append(
+            `<li class="story"><a href="${url}">${title}</a></li>`
+          );
+        }
       });
     });
   }
+
+  //7.show favourite
+  //   function showFavorite(){
+  // $.ajax({
+  //   method:"GET",
+  //   url:
+  // })
+  // }
+
   //show submit div on click of  submit link
   $('#submitlink').on('click', function(event) {
     $('#submit-form').toggleClass('hidden show');
   });
-
-  addStory();
-  favoriteStar();
-  showFavorite();
-  userSignUp();
-  logIn();
-  profile();
-  showAll();
 });
