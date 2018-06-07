@@ -9,7 +9,6 @@ $(document).ready(() => {
     // instead of assigning event listener to EVERY star
     // do it to only the parent and add a second selector parameter to listen
     $('.stories-list').on('click', 'i', function(event) {
-      console.log(event.target);
       let favList = $('fav-list');
       let username = localStorage.getItem('username');
       let userToken = localStorage.getItem('token');
@@ -27,9 +26,7 @@ $(document).ready(() => {
     });
   }
 
-  function addStory(event) {
-    // click is a jQuery for another way of saying on click or evenlistener for click
-    //
+  function addStory() {
     $('#submit-form').submit(function(event) {
       event.preventDefault();
       let urlVal = $('#url').val();
@@ -82,7 +79,7 @@ $(document).ready(() => {
       // changing text to toggle between fav and all
       // also switch class will only work for jquery UI?
       // need to remove class and then add a class or would toggle class work better?
-      $(this).text($(this).text() === '| Favorites' ? '| All' : '| Favorites');
+      $(this).text($(this).text() === 'Favorites' ? 'All' : 'Favorites');
       $(this)
         .removeClass('favoriteNav')
         .addClass('allNav');
@@ -97,7 +94,7 @@ $(document).ready(() => {
       $('.far')
         .closest('li')
         .show();
-      $(this).text($(this).text() === '| All' ? '| Favorites' : '| All');
+      $(this).text($(this).text() === 'All' ? 'Favorites' : 'All');
       $(this)
         .removeClass('allNav')
         .addClass('favoriteNav');
@@ -133,7 +130,7 @@ $(document).ready(() => {
     $('#login-form').toggleClass(' hidden show');
   });
   // 2) create a user sign up
-  function userSignUp(event) {
+  function userSignUp() {
     // click is a jQuery for another way of saying on click or evenlistener for click
     //
     $('#signup-form').submit(function(event) {
@@ -153,9 +150,6 @@ $(document).ready(() => {
         console.log(response.data);
       });
       event.target.reset();
-      // $('#signup-form').each(function() {
-      //   this.reset();
-      // });
     });
   }
   // 3) log in
@@ -172,16 +166,34 @@ $(document).ready(() => {
         }
       }).then(function(response) {
         localStorage.setItem('token', response.data.token);
-        console.log(localStorage.getItem('token'));
         $('#logoutLink').toggleClass('hidden show');
         $('#loginlink').toggleClass(' show hidden');
         $('#signUpLink').toggleClass('show hidden');
         $('#submitlink').toggleClass('show hidden');
+        $('#profile').toggleClass('hidden show');
       });
       event.target.reset();
     });
   }
-
+  //6 login profile
+  function profile() {
+    $('#profile').on('click', function(event) {
+      let username = localStorage.getItem('username');
+      let userToken = localStorage.getItem('token');
+      $.ajax({
+        method: 'GET',
+        url: `https://hack-or-snooze.herokuapp.com/users/${username}`,
+        headers: { Authorization: `Bearer ${userToken}` },
+        dataType: 'json'
+      }).then(function(response) {
+        let profileUsername = response.data.username;
+        let profileName = response.data.name;
+        $('#profile-name').append(`Name: ${profileName}`);
+        $('#profile-username').append(`Username: ${profileUsername}`);
+        $('.profile').toggleClass('show hidden');
+      });
+    });
+  }
   //show submit div on click of  submit link
   $('#submitlink').on('click', function(event) {
     $('#submit-form').toggleClass('hidden show');
@@ -192,5 +204,6 @@ $(document).ready(() => {
   showFavorite();
   userSignUp();
   logIn();
-  //showAll();
+  profile();
+  showAll();
 });
