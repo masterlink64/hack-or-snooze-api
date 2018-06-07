@@ -9,17 +9,24 @@ $(document).ready(() => {
     // instead of assigning event listener to EVERY star
     // do it to only the parent and add a second selector parameter to listen
     $('.stories-list').on('click', 'i', function(event) {
+      console.log(event.target);
       let favList = $('fav-list');
-      //let star = event.target
+      let username = localStorage.getItem('username');
+      let userToken = localStorage.getItem('token');
       $(this).toggleClass('far fas');
-      // need to append to favorite list when it is clicked
-      // how to get the information we want?
-      //favList.append(`<li class="story"><i class="far fa-star"></i> <a href="${dataVal}">${storyVal}</a></li>`)
+      //send ajax request to post data
+      $.ajax({
+        method: 'post',
+        url: `https://hack-or-snooze.herokuapp.com/users/${username}/favorites/${
+          event.target.id
+        }`,
+        headers: { Authorization: `Bearer ${userToken}` }
+      }).then(function(response) {
+        console.log(response);
+      });
     });
-  } // can I write IIFE here?
-  // function that will prevent default when you click the submit btn in the form
-  // and instead add a li element to the ordered list
-  // will need to grab values from form
+  }
+
   function addStory(event) {
     // click is a jQuery for another way of saying on click or evenlistener for click
     //
@@ -105,10 +112,11 @@ $(document).ready(() => {
   $.getJSON('https://hack-or-snooze.herokuapp.com/stories/')
     .then(function(response) {
       for (let i = 0; i < 10; i++) {
+        var storyid = response.data[i].storyId;
         let urlVal = response.data[i].url;
         let storyVal = response.data[i].title;
         $('.stories-list').append(
-          `<li class="story"><i class="far fa-star"></i> <a href="${urlVal}">${storyVal}</a></li>`
+          `<li class="story"><i class="far fa-star" id ="${storyid}"></i> <a href="${urlVal}">${storyVal}</a></li>`
         );
       }
     })
