@@ -234,9 +234,28 @@ $(document).ready(() => {
           let title = response.data.favorites[i].title;
           let favId = response.data.favorites[i].storyId;
           $('#showfavorite').append(
-            `<li class="story"><i class="fas fa-star"><a href="${url}">${title}</a><button class='remove-fav' type='button'>Remove Favorite</button></li>`
+            `<li id="r${favId}" class="profile-fav"><i class="fas fa-star"><a href="${url}">${title}</a><button class='remove-fav' type='button'>Remove Favorite</button></li>`
           );
         }
+        // event listener on remove fav button
+        $('.remove-fav').on('click', function(event) {
+          // li id="remove-button-17"     id="favorite-17"
+          // closest?
+          // this is grabbing the list through DOM manipulation travelling upwards
+          let favId = event.target.closest('li');
+          // grabbing id from the first index do not want 'r'
+          console.log(favId.id.slice(1));
+          $.ajax({
+            method: 'DELETE',
+            url: `https://hack-or-snooze.herokuapp.com/users/${username}/favorites/${
+              event.target.parent.id
+            }`,
+            headers: { Authorization: `Bearer ${userToken}` },
+            dataType: 'json'
+          }).then(function(response) {
+            console.log(response);
+          });
+        });
         //add stories
         for (let j = 0; j < storiesLength; j++) {
           let url = response.data.stories[j].url;
