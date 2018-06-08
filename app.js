@@ -237,23 +237,23 @@ $(document).ready(() => {
             `<li id="r${favId}" class="profile-fav"><i class="fas fa-star"><a href="${url}">${title}</a><button class='remove-fav' type='button'>Remove Favorite</button></li>`
           );
         }
+
         // event listener on remove fav button
         $('.remove-fav').on('click', function(event) {
           // li id="remove-button-17"     id="favorite-17"
           // closest?
           // this is grabbing the list through DOM manipulation travelling upwards
-          let favId = event.target.closest('li');
+          let favIdR = event.target.closest('li');
           // grabbing id from the first index do not want 'r'
-          console.log(favId.id.slice(1));
+          let favId = favIdR.id.slice(1);
           $.ajax({
             method: 'DELETE',
-            url: `https://hack-or-snooze.herokuapp.com/users/${username}/favorites/${
-              event.target.parent.id
-            }`,
+            url: `https://hack-or-snooze.herokuapp.com/users/${username}/favorites/${favId}`,
             headers: { Authorization: `Bearer ${userToken}` },
             dataType: 'json'
           }).then(function(response) {
             console.log(response);
+            event.target.closest('li').remove();
           });
         });
         //add stories
@@ -262,9 +262,23 @@ $(document).ready(() => {
           let title = response.data.stories[j].title;
           let storyId = response.data.stories[j].storyId;
           $('#mystories').append(
-            `<li class="story"><a href="${url}">${title}</a></li>`
+            `<li  id="s${storyId}" class="story"><a href="${url}">${title}</a> <button class="rmv-str">Remove Story</button></li>`
           );
         }
+        //remove story
+        $('.rmv-str').on('click', function(event) {
+          let strIds = event.target.closest('li');
+          let strId = strIds.id.slice(1);
+          $.ajax({
+            method: 'DELETE',
+            url: `https://hack-or-snooze.herokuapp.com/stories/${strId}`,
+            headers: { Authorization: `Bearer ${userToken}` },
+            dataType: 'json'
+          }).then(function(response) {
+            console.log(response);
+            event.target.closest('li').remove();
+          });
+        });
       });
     });
   }
